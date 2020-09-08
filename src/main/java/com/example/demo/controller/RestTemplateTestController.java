@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Card;
 import lombok.extern.log4j.Log4j2;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class RestTemplateTestController {
     public ResponseEntity addCards() {
 
         Card card = new Card();
-        card.setNumber("135244");
+        card.setNumber("1212535244");
         card.setHolder("dfsfsd");
         card.setCvv("987");
         card.setBalance(2000);
@@ -41,6 +42,7 @@ public class RestTemplateTestController {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add("OriginModule", "demo2");
+            httpHeaders.add("Authorization", "Basic " + Base64.encodeBase64String("admin:admin_password".getBytes()));
 
             HttpEntity<Card> httpEntity = new HttpEntity<>(card, httpHeaders);
             ResponseEntity<Card> cardResponseEntity = restTemplate.exchange("http://localhost:8080/api/cards", HttpMethod.POST, httpEntity, Card.class);
@@ -55,7 +57,6 @@ public class RestTemplateTestController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(exception.getResponseBodyAsString());
         }
-
 
     }
 }

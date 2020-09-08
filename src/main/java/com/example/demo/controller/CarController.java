@@ -11,15 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/car")
+@RequestMapping("/api/car")
 public class CarController {
 
     @Autowired
-    CarSerivce carSerivce;
+    private CarSerivce carSerivce;
 
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -30,6 +30,9 @@ public class CarController {
     }
 
 
+    // @Secured("ROLE_role1")
+    // @PreAuthorize("hasRole('ROLE_role1')")
+    //@RolesAllowed(value = {"ROLE_role1", "ROLE_role2"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAll() {
         return ResponseEntity.ok(carSerivce.getAll());
@@ -43,9 +46,8 @@ public class CarController {
 
     @PostMapping(/*spasum a back@ */consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity add(@Valid @RequestBody Car car) throws DuplicateDataException {
-
-        return ResponseEntity.ok(carSerivce.save(car));
-
+        carSerivce.save(car);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
